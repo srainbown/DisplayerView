@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MainViewController.h"
 
 @interface AppDelegate ()
 
@@ -14,9 +15,27 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window makeKeyAndVisible];
+    MainViewController *vc = [[MainViewController alloc]init];
+    self.window.rootViewController = vc;
+    
+    //设置默认清晰度
+    if (nil == [[NSUserDefaults standardUserDefaults] valueForKey:KWIFIOnlineVideoDefinition] ||
+        nil == [[NSUserDefaults standardUserDefaults] valueForKey:KWLANOnlineVideoDefinition] ||
+        nil == [[NSUserDefaults standardUserDefaults] valueForKey:KDefaultDefinition]) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:KWIFIOnlineVideoDefinition];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:KWLANOnlineVideoDefinition];
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:KDefaultDefinition];
+    }
+    
+    if (nil == [[NSUserDefaults standardUserDefaults] valueForKey:KDownLoadVideoDifinition]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:KDownLoadVideoDifinition];
+    }
+    
     return YES;
 }
 

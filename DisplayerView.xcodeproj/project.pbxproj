@@ -8,13 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		3E2A1CA120AD74CA00A8BFA4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CA020AD74CA00A8BFA4 /* AppDelegate.m */; };
-		3E2A1CA420AD74CA00A8BFA4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CA320AD74CA00A8BFA4 /* ViewController.m */; };
-		3E2A1CA720AD74CA00A8BFA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E2A1CA520AD74CA00A8BFA4 /* Main.storyboard */; };
 		3E2A1CA920AD74CC00A8BFA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E2A1CA820AD74CC00A8BFA4 /* Assets.xcassets */; };
 		3E2A1CAC20AD74CC00A8BFA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E2A1CAA20AD74CC00A8BFA4 /* LaunchScreen.storyboard */; };
 		3E2A1CAF20AD74CC00A8BFA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CAE20AD74CC00A8BFA4 /* main.m */; };
 		3E2A1CB920AD74CC00A8BFA4 /* DisplayerViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CB820AD74CC00A8BFA4 /* DisplayerViewTests.m */; };
 		3E2A1CC420AD74CC00A8BFA4 /* DisplayerViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CC320AD74CC00A8BFA4 /* DisplayerViewUITests.m */; };
+		3E2A1CD320AD760C00A8BFA4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CD220AD760C00A8BFA4 /* MainViewController.m */; };
+		3E2A1CD920AD774000A8BFA4 /* DisplayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CD820AD774000A8BFA4 /* DisplayerView.m */; };
+		3E2A1CDC20AD777500A8BFA4 /* DisplayerSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CDB20AD777500A8BFA4 /* DisplayerSlider.m */; };
+		3E2A1CE220AD788200A8BFA4 /* DisplayerVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CE120AD788200A8BFA4 /* DisplayerVolumeView.m */; };
+		3E2A1CE520AD78A200A8BFA4 /* DisplayerVolumeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CE420AD78A200A8BFA4 /* DisplayerVolumeSlider.m */; };
+		3E2A1CEC20AD89DC00A8BFA4 /* UIButton+DisplayerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CEB20AD89DC00A8BFA4 /* UIButton+DisplayerButton.m */; };
+		3E2A1CEF20AD8DD200A8BFA4 /* VedioModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A1CEE20AD8DD200A8BFA4 /* VedioModel.m */; };
+		EB1086C41CE2783C8A5D25F3 /* libPods-DisplayerView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB10420023CB847D55A4ECE5 /* libPods-DisplayerView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,12 +41,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1788983E2099728380F8BE5D /* Pods-DisplayerView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DisplayerView.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DisplayerView/Pods-DisplayerView.debug.xcconfig"; sourceTree = "<group>"; };
+		1C5C9183453CFBC3B98527D5 /* Pods-DisplayerView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DisplayerView.release.xcconfig"; path = "Pods/Target Support Files/Pods-DisplayerView/Pods-DisplayerView.release.xcconfig"; sourceTree = "<group>"; };
 		3E2A1C9C20AD74CA00A8BFA4 /* DisplayerView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DisplayerView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E2A1C9F20AD74CA00A8BFA4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3E2A1CA020AD74CA00A8BFA4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3E2A1CA220AD74CA00A8BFA4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3E2A1CA320AD74CA00A8BFA4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		3E2A1CA620AD74CA00A8BFA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3E2A1CA820AD74CC00A8BFA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E2A1CAB20AD74CC00A8BFA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3E2A1CAD20AD74CC00A8BFA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -51,6 +56,22 @@
 		3E2A1CBF20AD74CC00A8BFA4 /* DisplayerViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DisplayerViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E2A1CC320AD74CC00A8BFA4 /* DisplayerViewUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplayerViewUITests.m; sourceTree = "<group>"; };
 		3E2A1CC520AD74CC00A8BFA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3E2A1CD120AD760C00A8BFA4 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		3E2A1CD220AD760C00A8BFA4 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		3E2A1CD720AD774000A8BFA4 /* DisplayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisplayerView.h; sourceTree = "<group>"; };
+		3E2A1CD820AD774000A8BFA4 /* DisplayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplayerView.m; sourceTree = "<group>"; };
+		3E2A1CDA20AD777500A8BFA4 /* DisplayerSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisplayerSlider.h; sourceTree = "<group>"; };
+		3E2A1CDB20AD777500A8BFA4 /* DisplayerSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplayerSlider.m; sourceTree = "<group>"; };
+		3E2A1CE020AD788200A8BFA4 /* DisplayerVolumeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisplayerVolumeView.h; sourceTree = "<group>"; };
+		3E2A1CE120AD788200A8BFA4 /* DisplayerVolumeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplayerVolumeView.m; sourceTree = "<group>"; };
+		3E2A1CE320AD78A200A8BFA4 /* DisplayerVolumeSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisplayerVolumeSlider.h; sourceTree = "<group>"; };
+		3E2A1CE420AD78A200A8BFA4 /* DisplayerVolumeSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisplayerVolumeSlider.m; sourceTree = "<group>"; };
+		3E2A1CE720AD80BC00A8BFA4 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		3E2A1CEA20AD89DC00A8BFA4 /* UIButton+DisplayerButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+DisplayerButton.h"; sourceTree = "<group>"; };
+		3E2A1CEB20AD89DC00A8BFA4 /* UIButton+DisplayerButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+DisplayerButton.m"; sourceTree = "<group>"; };
+		3E2A1CED20AD8DD200A8BFA4 /* VedioModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VedioModel.h; sourceTree = "<group>"; };
+		3E2A1CEE20AD8DD200A8BFA4 /* VedioModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VedioModel.m; sourceTree = "<group>"; };
+		DB10420023CB847D55A4ECE5 /* libPods-DisplayerView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DisplayerView.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB1086C41CE2783C8A5D25F3 /* libPods-DisplayerView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +107,8 @@
 				3E2A1CB720AD74CC00A8BFA4 /* DisplayerViewTests */,
 				3E2A1CC220AD74CC00A8BFA4 /* DisplayerViewUITests */,
 				3E2A1C9D20AD74CA00A8BFA4 /* Products */,
+				54176EE01B1C5980DE0D484A /* Pods */,
+				8CDDB9C6144B0A2136FEA7DA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,11 +125,12 @@
 		3E2A1C9E20AD74CA00A8BFA4 /* DisplayerView */ = {
 			isa = PBXGroup;
 			children = (
+				3E2A1CE620AD80AA00A8BFA4 /* Other */,
+				3E2A1CD620AD767D00A8BFA4 /* Model */,
+				3E2A1CD420AD766800A8BFA4 /* View */,
+				3E2A1CD520AD767400A8BFA4 /* Controller */,
 				3E2A1C9F20AD74CA00A8BFA4 /* AppDelegate.h */,
 				3E2A1CA020AD74CA00A8BFA4 /* AppDelegate.m */,
-				3E2A1CA220AD74CA00A8BFA4 /* ViewController.h */,
-				3E2A1CA320AD74CA00A8BFA4 /* ViewController.m */,
-				3E2A1CA520AD74CA00A8BFA4 /* Main.storyboard */,
 				3E2A1CA820AD74CC00A8BFA4 /* Assets.xcassets */,
 				3E2A1CAA20AD74CC00A8BFA4 /* LaunchScreen.storyboard */,
 				3E2A1CAD20AD74CC00A8BFA4 /* Info.plist */,
@@ -132,6 +157,66 @@
 			path = DisplayerViewUITests;
 			sourceTree = "<group>";
 		};
+		3E2A1CD420AD766800A8BFA4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3E2A1CD720AD774000A8BFA4 /* DisplayerView.h */,
+				3E2A1CD820AD774000A8BFA4 /* DisplayerView.m */,
+				3E2A1CDA20AD777500A8BFA4 /* DisplayerSlider.h */,
+				3E2A1CDB20AD777500A8BFA4 /* DisplayerSlider.m */,
+				3E2A1CE020AD788200A8BFA4 /* DisplayerVolumeView.h */,
+				3E2A1CE120AD788200A8BFA4 /* DisplayerVolumeView.m */,
+				3E2A1CE320AD78A200A8BFA4 /* DisplayerVolumeSlider.h */,
+				3E2A1CE420AD78A200A8BFA4 /* DisplayerVolumeSlider.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3E2A1CD520AD767400A8BFA4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3E2A1CD120AD760C00A8BFA4 /* MainViewController.h */,
+				3E2A1CD220AD760C00A8BFA4 /* MainViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3E2A1CD620AD767D00A8BFA4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3E2A1CED20AD8DD200A8BFA4 /* VedioModel.h */,
+				3E2A1CEE20AD8DD200A8BFA4 /* VedioModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3E2A1CE620AD80AA00A8BFA4 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				3E2A1CE720AD80BC00A8BFA4 /* PrefixHeader.pch */,
+				3E2A1CEA20AD89DC00A8BFA4 /* UIButton+DisplayerButton.h */,
+				3E2A1CEB20AD89DC00A8BFA4 /* UIButton+DisplayerButton.m */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		54176EE01B1C5980DE0D484A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1788983E2099728380F8BE5D /* Pods-DisplayerView.debug.xcconfig */,
+				1C5C9183453CFBC3B98527D5 /* Pods-DisplayerView.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8CDDB9C6144B0A2136FEA7DA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DB10420023CB847D55A4ECE5 /* libPods-DisplayerView.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -139,6 +224,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3E2A1CC820AD74CC00A8BFA4 /* Build configuration list for PBXNativeTarget "DisplayerView" */;
 			buildPhases = (
+				4DF5BC8BB0B2F6FF39D74A76 /* [CP] Check Pods Manifest.lock */,
 				3E2A1C9820AD74CA00A8BFA4 /* Sources */,
 				3E2A1C9920AD74CA00A8BFA4 /* Frameworks */,
 				3E2A1C9A20AD74CA00A8BFA4 /* Resources */,
@@ -237,7 +323,6 @@
 			files = (
 				3E2A1CAC20AD74CC00A8BFA4 /* LaunchScreen.storyboard in Resources */,
 				3E2A1CA920AD74CC00A8BFA4 /* Assets.xcassets in Resources */,
-				3E2A1CA720AD74CA00A8BFA4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,13 +342,40 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4DF5BC8BB0B2F6FF39D74A76 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DisplayerView-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3E2A1C9820AD74CA00A8BFA4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E2A1CA420AD74CA00A8BFA4 /* ViewController.m in Sources */,
+				3E2A1CEF20AD8DD200A8BFA4 /* VedioModel.m in Sources */,
 				3E2A1CAF20AD74CC00A8BFA4 /* main.m in Sources */,
+				3E2A1CE520AD78A200A8BFA4 /* DisplayerVolumeSlider.m in Sources */,
+				3E2A1CD320AD760C00A8BFA4 /* MainViewController.m in Sources */,
+				3E2A1CEC20AD89DC00A8BFA4 /* UIButton+DisplayerButton.m in Sources */,
+				3E2A1CD920AD774000A8BFA4 /* DisplayerView.m in Sources */,
+				3E2A1CDC20AD777500A8BFA4 /* DisplayerSlider.m in Sources */,
+				3E2A1CE220AD788200A8BFA4 /* DisplayerVolumeView.m in Sources */,
 				3E2A1CA120AD74CA00A8BFA4 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,14 +412,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3E2A1CA520AD74CA00A8BFA4 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3E2A1CA620AD74CA00A8BFA4 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3E2A1CAA20AD74CC00A8BFA4 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -431,35 +535,43 @@
 		};
 		3E2A1CC920AD74CC00A8BFA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1788983E2099728380F8BE5D /* Pods-DisplayerView.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X25NZXZ393;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DisplayerView/Other/PrefixHeader.pch;
 				INFOPLIST_FILE = DisplayerView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dangbei.www.DisplayerView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		3E2A1CCA20AD74CC00A8BFA4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1C5C9183453CFBC3B98527D5 /* Pods-DisplayerView.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X25NZXZ393;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DisplayerView/Other/PrefixHeader.pch;
 				INFOPLIST_FILE = DisplayerView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dangbei.www.DisplayerView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
