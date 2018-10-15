@@ -39,7 +39,7 @@
 }
 #pragma mark -- 创建播放器
 -(void)createVedioView{
-    _playerFrame = CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT * 211/667);
+    _playerFrame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT * 211/667);
     _displayerView = [DisplayerView sharedInstance];
     _displayerView.frame = _playerFrame;
     
@@ -176,10 +176,10 @@
     
 }
 
-//修改状态栏
+//状态栏隐藏
 - (BOOL)prefersStatusBarHidden
 {
-    return _isFullScreen;
+    return YES;
 }
 
 /**
