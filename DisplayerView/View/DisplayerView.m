@@ -1990,11 +1990,12 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     }];
     
     [player.fastView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(SCREEN_WIDTH/2-36);
+        make.centerX.mas_equalTo(player);
         make.height.mas_equalTo(@78);
         make.width.mas_equalTo(@336);
         make.top.mas_equalTo(player).offset(18);
     }];
+    
     
     [player.fastProgressView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(27);
@@ -2146,7 +2147,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
             make.right.mas_equalTo(self);
             make.height.mas_equalTo(40);
             make.bottom.mas_equalTo(self);
-            
         }];
         
         [player.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -2232,7 +2232,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [player.btnRight mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(@30);
         make.width.mas_equalTo(@60);
-        make.top.mas_equalTo(player.labNetWorkMention.bottom).with.offset(10);
+        make.top.mas_equalTo(player.labNetWorkMention.bottom).offset(10);
         make.right.mas_equalTo(player.labNetWorkMention).offset(14);
     }];
 }
