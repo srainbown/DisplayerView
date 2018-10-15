@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B1FF81259F9733AAEF975B81E2C4A9D7"
+               BlueprintIdentifier = "9FDFF7DB63C80BE1ED69522A089B112F"
                BlueprintName = "Pods-DisplayerView"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "libPods-DisplayerView.a">

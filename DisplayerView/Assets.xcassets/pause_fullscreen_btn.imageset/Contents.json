@@ -6,12 +6,12 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "pause_fullscreen_btn@2x.PNG",
+      "filename" : "pause_fullscreen_btn@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "pause_fullscreen_btn@3x.PNG",
+      "filename" : "pause_fullscreen_btn@3x.png",
       "scale" : "3x"
     }
   ],

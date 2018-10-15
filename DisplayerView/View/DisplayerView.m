@@ -23,9 +23,12 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 __strong static DisplayerView *sharedDisPlayerManager = nil;
 
 
-@interface DisplayerView() <UIGestureRecognizerDelegate>{
-    Reachability * _hostReach;
-}
+@interface DisplayerView() <UIGestureRecognizerDelegate>
+//{
+//    Reachability * _hostReach;
+//}
+@property (nonatomic, strong) Reachability *hostReach;
+
 @property (nonatomic,assign)CGPoint firstPoint;
 @property (nonatomic,assign)CGPoint secondPoint;
 @property (nonatomic, strong)NSDateFormatter *dateFormatter;
@@ -98,15 +101,16 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         NSError * audioSessionError;
         [audioSession setCategory:AVAudioSessionCategoryPlayback  error:&audioSessionError];
+        WS(weakSelf);
         
         if (_isFromDownLoadedView == NO) {
             //开启网络状况的监听
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
-                _hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];//会出现两次到监听方法中去的情况
+                weakSelf.hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];//会出现两次到监听方法中去的情况
                 //网络监听
                 //        hostReach = [Reachability reachabilityForInternetConnection];
-                [_hostReach startNotifier];  //开始监听,会启动一个run loop
+                [weakSelf.hostReach startNotifier];  //开始监听,会启动一个run loop
 
             });
         }
@@ -1130,11 +1134,9 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         self.screenCacheSlider.alpha = 0.0;
     }else{
         self.bottomView.alpha = 0.0;
-        //self.btnClose.alpha = 0.0;
         self.btnPlayOrPause.alpha = 0.0;
         self.topView.alpha = 0.0;
         self.bgImgView.alpha = 0.0;
-        
         self.screenSlider.alpha  = 1.0;
         self.screenCacheSlider.alpha = 1.0;
     }
@@ -1168,16 +1170,26 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     if (self.delegate&&[self.delegate respondsToSelector:@selector(kyvedioPlayer:doubleTaped:)]) {
         [self.delegate kyvedioPlayer:self doubleTaped:doubleTap];
     }
-    [UIView animateWithDuration:0.5 animations:^{
-        self.bottomView.alpha = 1.0;
-        self.topView.alpha = 1.0;
-        self.bgImgView.alpha = 1.0;
-        self.btnPlayOrPause.alpha = 1.0;
-        
-    } completion:^(BOOL finish){
-        self.screenSlider.alpha  = 0.0;
-        self.screenCacheSlider.alpha = 0.0;
-    }];
+    if (self.player.rate != 1.f) {
+     if ([self currentTime] == self.duration)
+     [self setCurrentTime:0.f];
+     [self.player play];
+     self.btnPlayOrPause.selected = NO;
+     } else {
+     [self.player pause];
+     self.btnPlayOrPause.selected = YES;
+     }
+    
+//    [UIView animateWithDuration:0.5 animations:^{
+//        self.bottomView.alpha = 1.0;
+//        self.topView.alpha = 1.0;
+//        self.bgImgView.alpha = 1.0;
+//        self.btnPlayOrPause.alpha = 1.0;
+//
+//    } completion:^(BOOL finish){
+//        self.screenSlider.alpha  = 0.0;
+//        self.screenCacheSlider.alpha = 0.0;
+//    }];
 }
 
 
@@ -1855,7 +1867,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         float minValue = [self.progressSlider minimumValue];
         float maxValue = [self.progressSlider maximumValue];
         double nowTime = CMTimeGetSeconds([self.player currentTime]);
-        double remainTime = duration-nowTime;
+//        double remainTime = duration-nowTime;
         if (nowTime > 0) {
             self.backgroundColor = [UIColor blackColor];
         }
@@ -2019,11 +2031,11 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     
     [player.loadFailedLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(SCREEN_HEIGHT);
-        make.center.mas_equalTo(CGPointMake(SCREEN_WIDTH/2-36, -(SCREEN_WIDTH/2)+36));
+        make.center.mas_equalTo(player);
         make.height.mas_equalTo(@30);
     }];
     [player.loadingView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.center.mas_equalTo(CGPointMake(SCREEN_WIDTH/2-37, -(SCREEN_WIDTH/2-37)));
+        make.center.mas_equalTo(player);
     }];
     
     //设置对应的4G提示框显示内容
