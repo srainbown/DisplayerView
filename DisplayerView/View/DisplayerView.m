@@ -43,7 +43,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 @property (nonatomic, strong) UITapGestureRecognizer *tap;
 @property (nonatomic, assign) CGPoint originalPoint;
 @property (nonatomic, assign) BOOL isDragingSlider;             //是否点击了按钮的响应事件
-@property (nonatomic, assign) BOOL isShowNextName;              //是否显示下一个影片的提示
 
 /**
  *  显示播放时间的UILabel
@@ -51,8 +50,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 @property (nonatomic,strong) UILabel        *leftTimeLabel;
 @property (nonatomic,strong) UILabel        *rightTimeLabel;
 @property (nonatomic,strong) UIImage        *screenShotImg;
-@property (nonatomic,strong) UILabel        *labWillPayeNext; //播放下一个视频文字
-
 
 
 /**
@@ -74,7 +71,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 @property (nonatomic, strong) UILabel                   *labNetWorkMention;    //网络提示语
 @property (nonatomic, strong) UIButton                  *btnLeft;              //停止播放
 @property (nonatomic, strong) UIButton                  *btnRight;             //继续播放
-@property (strong, nonatomic) UIButton                  *btnFilmDetail;        //1.5版本中全片按钮
+
 
 /** 定义一个实例变量，保存枚举值 */
 @property (nonatomic, assign) PanDirection           panDirection;
@@ -84,7 +81,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 @property (nonatomic, assign) BOOL                   isDragged;
 
 @property (nonatomic, assign) BOOL                   is4GNetWork;   //是4G网络
-@property (nonatomic, assign) BOOL                   isFilmDetail;  //是否是全片
 
 
 @end
@@ -205,9 +201,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     self.isForbiddenFullScreen = YES;    //默认可以全屏
     self.isDragingSlider = NO;
     self.is4GNetWork = NO;
-    self.isShowNextName = NO;
     self.isFromDetailView = NO;
-    self.isFilmDetail = NO;
     
     //cell中的背景
     self.bgImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"black"]];
@@ -229,7 +223,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self addSubview:self.bottomView];
     
     //添加暂停和开启按钮
-    self.btnPlayOrPause = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnPlayOrPause = [[UIButton alloc]init];
     self.btnPlayOrPause.showsTouchWhenHighlighted = YES;
     [self.btnPlayOrPause addTarget:self action:@selector(PlayOrPause:) forControlEvents:UIControlEventTouchUpInside];
     [self.btnPlayOrPause setImage:[UIImage imageNamed:@"pause_icon"] ?: [UIImage imageNamed:@"pause_icon"] forState:UIControlStateNormal];
@@ -309,7 +303,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self.screenSlider setProgress:0.0 animated:NO];
     
     //全屏按钮
-    self.btnFullScreen = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnFullScreen = [[UIButton alloc]init];
     self.btnFullScreen.showsTouchWhenHighlighted = YES;
     [self.btnFullScreen addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.btnFullScreen setImage:[UIImage imageNamed:@"full_icon"] ?: [UIImage imageNamed:@"full_icon"] forState:UIControlStateNormal];
@@ -317,7 +311,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self.bottomView addSubview:self.btnFullScreen];
     
     //关闭按钮
-    _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _closeBtn = [[UIButton alloc]init];
     _closeBtn.showsTouchWhenHighlighted = YES;
     [_closeBtn addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
     [_closeBtn setImage:[UIImage imageNamed:@"back_white_icon"] ?: [UIImage imageNamed:@"back_white_icon"] forState:UIControlStateNormal];
@@ -332,16 +326,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     self.leftTimeLabel.font = [UIFont systemFontOfSize:11];
     self.leftTimeLabel.text = @"00:00";
     [self.bottomView addSubview:self.leftTimeLabel];
-    
-    //labWillPayeNext
-    self.labWillPayeNext = [[UILabel alloc]init];
-    self.labWillPayeNext.textAlignment = NSTextAlignmentCenter;
-    self.labWillPayeNext.textColor = C241;
-    self.labWillPayeNext.backgroundColor = [UIColor clearColor];
-    self.labWillPayeNext.font = [UIFont systemFontOfSize:T7];
-    self.labWillPayeNext.text = @"即将播放 XXXXXXX";
-    [self addSubview:self.labWillPayeNext];
-    [self.labWillPayeNext setHidden:YES];
     
     //右边时间
     self.rightTimeLabel = [[UILabel alloc]init];
@@ -366,93 +350,82 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     //添加网络切换方法
     //添加底部视图netWorkView
     self.netWorkView = [[UIView alloc]init];
-    self.netWorkView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.9];
     [self addSubview:self.netWorkView];
-    
-    //labNetWorkMention(@"您在正在使用非wifi网络，继续播放将会产生流量费用")
-    self.labNetWorkMention = [[UILabel alloc]init];
-    self.labNetWorkMention.textColor = C0;
-    self.labNetWorkMention.numberOfLines = 0;
-    self.labNetWorkMention.textAlignment = NSTextAlignmentCenter;
-    self.labNetWorkMention.font = [UIFont systemFontOfSize:T5];
-    self.labNetWorkMention.text = NetWork_Mention;
-    [self.netWorkView addSubview:self.labNetWorkMention];
-    
-    //左边的按钮
-    _btnLeft = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnLeft.backgroundColor = [UIColor clearColor];
-    _btnLeft.tag = 0;
-    _btnLeft.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    _btnLeft.titleLabel.font = [UIFont systemFontOfSize: T5];
-    [_btnLeft setTitleColor: C2 forState:UIControlStateNormal];
-    [_btnLeft setTitle:@"停止播放" forState:UIControlStateNormal];
-    [self.netWorkView addSubview:_btnLeft];
-    [_btnLeft addTarget:self action:@selector(netWorkfResponce:) forControlEvents:UIControlEventTouchUpInside];
-    
-    //左边的按钮
-    _btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnRight.backgroundColor = [UIColor clearColor];
-    _btnRight.tag = 1;
-    _btnRight.titleLabel.font = [UIFont systemFontOfSize: T5];
-    _btnRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    [_btnRight setTitleColor: C2 forState:UIControlStateNormal];
-    [_btnRight setTitle:@"继续播放" forState:UIControlStateNormal];
-    [self.netWorkView addSubview:_btnRight];
-    [_btnRight addTarget:self action:@selector(netWorkfResponce:) forControlEvents:UIControlEventTouchUpInside];
-    
-    //全片入口
-    _btnFilmDetail = [UIButton creatButtonWithTitile:nil TextColor:[UIColor clearColor] Font:0 BackgroundColor:[UIColor clearColor] setImage:@"icon_corner"];
-    [_btnFilmDetail addTarget:self action:@selector(btnFilmDetail:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_btnFilmDetail];
-    [_btnFilmDetail setHidden:YES];
-    //全片的位置
-    [_btnFilmDetail mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(26 * DBHeightScale);
-        make.width.equalTo(59*DBWidthScale);
-        make.left.equalTo(self);
-        make.top.equalTo(self).offset(5*DBHeightScale);
-    }];
-    
     
     [self.netWorkView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self);
         make.height.mas_equalTo(self);
         make.center.mas_equalTo(self);
     }];
+    self.netWorkView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.9];
+
+    
+    //labNetWorkMention(@"您在正在使用非wifi网络，继续播放将会产生流量费用")
+    self.labNetWorkMention = [[UILabel alloc]init];
+    [self.netWorkView addSubview:self.labNetWorkMention];
     
     [self.labNetWorkMention mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.netWorkView);
-        make.height.equalTo(@30);
+        make.center.mas_equalTo(self.netWorkView);
+        make.height.mas_equalTo(@30);
     }];
+    self.labNetWorkMention.textColor = C0;
+    self.labNetWorkMention.numberOfLines = 0;
+    self.labNetWorkMention.textAlignment = NSTextAlignmentCenter;
+    self.labNetWorkMention.font = [UIFont systemFontOfSize:T5];
+    self.labNetWorkMention.text = NetWork_Mention;
+
     
-    //取消播放按钮
+    //左边的按钮
+    _btnLeft = [[UIButton alloc]init];
+    [self.netWorkView addSubview:_btnLeft];
+    
     [_btnLeft mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@30);
-        make.width.equalTo(@60);
-        make.top.equalTo(self.labNetWorkMention.bottom).with.offset(10);
-        make.left.equalTo(self.labNetWorkMention.left).offset(-12);
+        make.height.mas_equalTo(@30);
+        make.width.mas_equalTo(@60);
+        make.top.mas_equalTo(self.labNetWorkMention.bottom).offset(10);
+        make.left.mas_equalTo(self.labNetWorkMention).offset(-12);
     }];
+    _btnLeft.backgroundColor = [UIColor clearColor];
+    _btnLeft.tag = 0;
+    _btnLeft.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    _btnLeft.titleLabel.font = [UIFont systemFontOfSize: T5];
+    [_btnLeft setTitleColor: C2 forState:UIControlStateNormal];
+    [_btnLeft setTitle:@"停止播放" forState:UIControlStateNormal];
+    [_btnLeft addTarget:self action:@selector(netWorkfResponce:) forControlEvents:UIControlEventTouchUpInside];
+
     
-    //继续播放按钮
+    //左边的按钮
+    _btnRight = [[UIButton alloc]init];
+    [self.netWorkView addSubview:_btnRight];
+    
     [_btnRight mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@30);
-        make.width.equalTo(@60);
-        make.top.equalTo(self.labNetWorkMention.bottom).with.offset(10);
-        make.right.equalTo(self.labNetWorkMention.right).offset(14);
+        make.height.mas_equalTo(@30);
+        make.width.mas_equalTo(@60);
+        make.top.equalTo(self.labNetWorkMention.bottom).offset(10);
+        make.right.equalTo(self.labNetWorkMention).offset(14);
     }];
+    _btnRight.backgroundColor = [UIColor clearColor];
+    _btnRight.tag = 1;
+    _btnRight.titleLabel.font = [UIFont systemFontOfSize: T5];
+    _btnRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [_btnRight setTitleColor: C2 forState:UIControlStateNormal];
+    [_btnRight setTitle:@"继续播放" forState:UIControlStateNormal];
+    [_btnRight addTarget:self action:@selector(netWorkfResponce:) forControlEvents:UIControlEventTouchUpInside];
+
     
     //音量指示器
     _volumeView = [[DisplayerVolumeView alloc]init];
     [self addSubview:_volumeView];
-    _volumeView.volumeImageView.image = [UIImage imageNamed:@"xiangqing_icon_sound"];
     
     [_volumeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.top).offset(SCREEN_HEIGHT/667 * 21);
-        make.left.mas_equalTo(self.left).offset(SCREEN_WIDTH/375 * 45);
-        make.bottom.mas_equalTo(self.bottom).offset(-SCREEN_HEIGHT/667 * 24);
-        make.width.mas_equalTo(SCREEN_WIDTH/375 * 36);
+        make.top.mas_equalTo(self).offset(ZCXHeightScale * 21);
+        make.left.mas_equalTo(self).offset(ZCXWidthScale * 45);
+        make.bottom.mas_equalTo(self).offset(-ZCXHeightScale * 24);
+        make.width.mas_equalTo(ZCXWidthScale * 36);
     }];
+    _volumeView.volumeImageView.image = [UIImage imageNamed:@"xiangqing_icon_sound"];
     _volumeView.hidden = YES;
+
     //获取当前系统音量
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(volumeChanged:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
     
@@ -462,13 +435,15 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     //亮度调节指示器
     _brightnessView = [[DisplayerVolumeView alloc]init];
     [self addSubview:_brightnessView];
-    _brightnessView.volumeImageView.image = [UIImage imageNamed:@"xiangqing_icon_light"];
+    
     [_brightnessView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.top).offset(SCREEN_HEIGHT/667 * 21);
-        make.right.mas_equalTo(self.right).offset(- SCREEN_WIDTH/375 * 45);
-        make.bottom.mas_equalTo(self.bottom).offset(- SCREEN_HEIGHT/667 * 24);
-        make.width.mas_equalTo(SCREEN_WIDTH/375 * 36);
+        make.top.mas_equalTo(self).offset(ZCXHeightScale * 21);
+        make.right.mas_equalTo(self).offset(- ZCXWidthScale * 45);
+        make.bottom.mas_equalTo(self).offset(- ZCXHeightScale * 24);
+        make.width.mas_equalTo(ZCXWidthScale * 36);
     }];
+    _brightnessView.volumeImageView.image = [UIImage imageNamed:@"xiangqing_icon_light"];
+    
     
     [self setFastView];
     self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -486,6 +461,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self.topView setHidden:YES];
     self.netWorkView.hidden = YES;
     _brightnessView.hidden = YES;
+
 }
 //获取当前系统的音量
 -(void)volumeChanged:(NSNotification *)notification{
@@ -541,44 +517,43 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 -(void)makeConstraints{
     
     [self.loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self);
+        make.center.mas_equalTo(self);
     }];
     //[self.loadingView startAnimating];
     
     [self.btnPlayOrPause mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(100);
         make.width.mas_equalTo(100);
-        make.center.equalTo(self);
+        make.center.mas_equalTo(self);
         
     }];
     
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).with.offset(0);
-        make.right.equalTo(self).with.offset(0);
+        make.left.mas_equalTo(self);
+        make.right.mas_equalTo(self);
         make.height.mas_equalTo(60);
-        make.top.equalTo(self).with.offset(0);
+        make.top.mas_equalTo(self);
     }];
     
     [self.bgImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self);
-        make.height.equalTo(self);
-        make.width.equalTo(self);
+        make.center.mas_equalTo(self);
+        make.height.mas_equalTo(self);
+        make.width.mas_equalTo(self);
     }];
     
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).with.offset(0);
-        make.right.equalTo(self).with.offset(0);
+        make.left.mas_equalTo(self);
+        make.right.mas_equalTo(self);
         make.height.mas_equalTo(40);
-        make.bottom.equalTo(self).with.offset(0);
+        make.bottom.mas_equalTo(self);
         
     }];
     
     
     [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bottomView).with.offset(45);
-        make.right.equalTo(self.bottomView).with.offset(-80);
-        make.center.equalTo(self.bottomView);
-        //make.top.equalTo(self.bottomView);
+        make.left.mas_equalTo(self.bottomView).offset(45);
+        make.right.mas_equalTo(self.bottomView).offset(-80);
+        make.centerY.mas_equalTo(self.bottomView);
         make.height.mas_equalTo(@3);
     }];
     
@@ -586,7 +561,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self.loadingProgress mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.progressSlider);
         make.right.mas_equalTo(self.progressSlider);
-        make.center.mas_equalTo(self.progressSlider);
+        make.centerY.mas_equalTo(self.progressSlider);
         make.height.mas_equalTo(@1.0);
     }];
     [self.bottomView sendSubviewToBack:self.loadingProgress];
@@ -595,7 +570,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self.screenSlider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self);
         make.right.mas_equalTo(self);
-        make.bottom.mas_equalTo(self.bottom);
+        make.bottom.mas_equalTo(self);
         make.height.mas_equalTo(@1.0);
     }];
     
@@ -611,48 +586,37 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self setAutoresizesSubviews:NO];
     
     [self.btnFullScreen mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.bottomView).with.offset(0);
+        make.right.mas_equalTo(self.bottomView);
         make.height.mas_equalTo(40);
-        make.bottom.mas_equalTo(self.bottomView).with.offset(0);
+        make.bottom.mas_equalTo(self.bottomView);
         make.width.mas_equalTo(40);
     }];
     
     [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.topView).with.offset(5);
+        make.left.equalTo(self.topView).offset(5);
         make.height.mas_equalTo(30);
-        make.top.equalTo(self.topView).with.offset(5);
+        make.top.mas_equalTo(self.topView).offset(5);
         make.width.mas_equalTo(30);
     }];
     
     [self.leftTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.bottomView).with.offset(5);
+        make.left.mas_equalTo(self.bottomView).offset(5);
         make.width.mas_equalTo(@35);
         make.height.mas_equalTo(@20);
         make.centerY.mas_equalTo(self.bottomView);
     }];
     
-    //labWillPayeNext
-    [self.labWillPayeNext mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(SCREEN_WIDTH*2/3);
-        //make.center.mas_equalTo(_topView.center);
-        make.top.mas_equalTo(self.mas_top).offset(20);
-        make.right.mas_equalTo(self.mas_right).offset(-(SCREEN_WIDTH/6 - 5));
-        //make.centerY.mas_equalTo(_topView.mas_centerY);
-    }];
-    
     [self.rightTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(@35);
         make.height.mas_equalTo(20);
-        make.right.mas_equalTo(self.bottomView).with.offset(-35);
-        make.centerY.mas_equalTo(self.bottomView).with.offset(0);
+        make.right.mas_equalTo(self.bottomView).offset(-35);
+        make.centerY.mas_equalTo(self.bottomView).offset(0);
     }];
     
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.topView).with.offset(12);
-        make.right.mas_equalTo(self.topView).with.offset(-12);
-        //make.center.mas_equalTo(self.topView);
-        make.top.mas_equalTo(self.topView).with.offset(12);
-        //make.bottom.mas_equalTo(self.topView);
+        make.left.mas_equalTo(self.topView).offset(12);
+        make.right.mas_equalTo(self.topView).offset(-12);
+        make.top.mas_equalTo(self.topView).offset(12);
     }];
     
     //[self.topView setHidden:YES];
@@ -660,7 +624,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self bringSubviewToFront:self.btnPlayOrPause];
     [self bringSubviewToFront:self.bottomView];
     [self bringSubviewToFront:self.netWorkView];
-    [self bringSubviewToFront:self.btnFilmDetail];
     
 }
 
@@ -710,7 +673,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     self.backgroundColor = [UIColor clearColor];
     
     self.fastView.hidden = YES;
-    [self.labWillPayeNext setHidden: YES];
     [self.topView setHidden: YES];
     
 }
@@ -744,9 +706,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self.autoDismissTimer invalidate];
     self.autoDismissTimer = nil;
     self.videoOutPut = nil;
-    self.isShowNextName = NO;
-    self.isFilmDetail = NO;
-    [_btnFilmDetail setHidden:YES];
+
 }
 
 
@@ -804,9 +764,9 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         [self addSubview:_labLoadFailed];
         
         [_labLoadFailed mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.center.equalTo(self);
-            make.width.equalTo(self);
-            make.height.equalTo(@30);
+            make.center.mas_equalTo(self);
+            make.width.mas_equalTo(self);
+            make.height.mas_equalTo(@30);
             
         }];
     }
@@ -911,10 +871,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     if (_URLString == URLString) {
         return;
     }
-    //判断是否现实全片按钮
-    if ([_btnFilmDetail isHidden]) {
-        _isFilmDetail = NO;
-    }
+
     //重置播放器
     [self resetDisPlayer];
     
@@ -941,17 +898,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 //重写homepageModel方法
 - (void) setVedioModel:(VedioModel *)vedioModel{
     _vedioModel = vedioModel;
-    //默认是不现实“全片”按钮
-    _isFilmDetail = NO;
-    
-    if (nil != vedioModel.filmID && vedioModel.filmID.length > 0) {
-        //判断有全片 显示全片按钮
-        _isFilmDetail = YES;
-    }
-    
-    if (1.0 == self.topView.alpha || 1.0 == self.btnPlayOrPause.alpha) {
-        [_btnFilmDetail setHidden:!_isFilmDetail];
-    }
     
     //判断视频的清晰度
     //    _URLString = homePageModel.videoURL;
@@ -979,7 +925,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 //重写isFromDetailView
 -(void) setIsFromDetailView:(BOOL)isFromDetailView{
     _isFromDetailView = isFromDetailView;
-    [self.btnFilmDetail setHidden:_isFromDetailView];
+
 }
 
 /**
@@ -1178,19 +1124,14 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     if (self.bottomView.alpha == 0.0) {
         self.bottomView.alpha = 1.0;
         self.btnPlayOrPause.alpha = 1.0;
-        if(_isFilmDetail &&(!_isFromDetailView)){
-            self.btnFilmDetail.alpha = 1.0;
-        }
         self.topView.alpha = 1.0;
         self.bgImgView.alpha = 1.0;
-        
         self.screenSlider.alpha  = 0.0;
         self.screenCacheSlider.alpha = 0.0;
     }else{
         self.bottomView.alpha = 0.0;
         //self.btnClose.alpha = 0.0;
         self.btnPlayOrPause.alpha = 0.0;
-        self.btnFilmDetail.alpha = 0.0;
         self.topView.alpha = 0.0;
         self.bgImgView.alpha = 0.0;
         
@@ -1210,11 +1151,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         if ((1.0 == self.btnPlayOrPause.alpha)|| (1.0 == self.bottomView.alpha)) {
             [UIView animateWithDuration:0.5 animations:^{
                 self.bottomView.alpha = 0.0;
-                //self.btnClose.alpha = 0.0;
                 self.btnPlayOrPause.alpha = 0.0;
-                if(_isFilmDetail &&(!_isFromDetailView)){
-                    self.btnFilmDetail.alpha = 0.0;
-                }
                 self.topView.alpha = 0.0;
                 self.bgImgView.alpha = 0.0;
                 
@@ -1236,9 +1173,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         self.topView.alpha = 1.0;
         self.bgImgView.alpha = 1.0;
         self.btnPlayOrPause.alpha = 1.0;
-        if(_isFilmDetail &&(!_isFromDetailView)){
-            self.btnFilmDetail.alpha = 1.0;
-        }
         
     } completion:^(BOOL finish){
         self.screenSlider.alpha  = 0.0;
@@ -1269,8 +1203,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     }];
     
     if (self.delegate&&[self.delegate respondsToSelector:@selector(kyplayerFinishedPlay:)]) {
-        //隐藏下一个播放提示
-        [self.labWillPayeNext setHidden:YES];
         [self.delegate kyplayerFinishedPlay:self];
     }
 }
@@ -1310,9 +1242,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     //是否显示底部view
     if (0.0 == self.bottomView.alpha) {
         self.btnPlayOrPause.alpha = 0.0;
-        if(_isFilmDetail){
-            self.btnFilmDetail.alpha = 0.0;
-        }
     }
     self.detailState = DBCHDisplayerStatePlaying;
     [self.player play];
@@ -1337,9 +1266,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
 - (void)pause{
     self.btnPlayOrPause.selected = YES;
     self.btnPlayOrPause.alpha = 1.0;
-    if(_isFilmDetail &&(!_isFromDetailView)){
-        self.btnFilmDetail.alpha = 1.0;
-    }
     self.detailState = DBCHDisplayerStateStopped;
     [self.player pause];
     if ([self.delegate respondsToSelector:@selector(kyvedioPlayer:clickedPlayOrPauseButton:)]) {
@@ -1469,11 +1395,11 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
             CMTime duration             = self.currentItem.duration;
             CGFloat totalDuration       = CMTimeGetSeconds(duration);
             //缓冲颜色
-            self.loadingProgress.progressTintColor = JXColor(255, 255, 255, 0.7);
+            self.loadingProgress.progressTintColor = ZCXColor(255, 255, 255, 0.7);
             [self.loadingProgress setProgress: timeInterval/totalDuration animated: NO];
             
             //缓冲颜色
-            self.screenCacheSlider.progressTintColor = JXColor(255, 255, 255, 0.7);
+            self.screenCacheSlider.progressTintColor = ZCXColor(255, 255, 255, 0.7);
             [self.screenCacheSlider setProgress: timeInterval/totalDuration animated: NO];
             
         } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
@@ -1741,14 +1667,14 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         make.width.mas_equalTo(177);
         make.height.mas_equalTo(78);
         make.top.mas_equalTo(self).offset(9);
-        make.centerX.equalTo(self.mas_centerX);
+        make.centerX.mas_equalTo(self);
     }];
     
     [self.fastImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_offset(24);
-        make.height.mas_offset(24);
+        make.width.mas_equalTo(@24);
+        make.height.mas_equalTo(@24);
         make.top.mas_equalTo(9);
-        make.centerX.mas_equalTo(self.fastView.mas_centerX);
+        make.centerX.mas_equalTo(self.fastView);
     }];
     
     [self.fastTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1766,8 +1692,8 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [self.fastProgressView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(10);
         make.trailing.mas_equalTo(-10);
-        make.height.offset(3);
-        make.bottom.mas_equalTo(self.fastView.bottom).offset(-9);
+        make.height.mas_equalTo(@3);
+        make.bottom.mas_equalTo(self.fastView).offset(-9);
     }];
 }
 
@@ -1945,12 +1871,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
             self.screenSlider.progressTintColor = C2;
         }
         
-        //显示提示下一个播放提示
-        if (self.isShowNextName && (remainTime < kShowNextlabTime)) {
-            [self.labWillPayeNext setHidden:NO];
-            self.isShowNextName = NO;
-        }
-        
     }
     
     //self.isDragingSlider = NO;
@@ -2045,12 +1965,13 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [player.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(40);
         make.bottom.mas_equalTo(-40);
-        make.left.right.equalTo(player).offset(0);
+        make.left.mas_equalTo(player);
+        make.right.mas_equalTo(player);
     }];
     [player.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(player);
         make.height.mas_equalTo(60);
-        make.left.equalTo(player).with.offset(0);
+        make.left.mas_equalTo(player);
         make.width.mas_equalTo(SCREEN_HEIGHT);
     }];
     
@@ -2058,11 +1979,10 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         make.width.mas_equalTo(SCREEN_HEIGHT);
         make.top.mas_equalTo(player);
         make.left.mas_equalTo(player);
-        make.height.equalTo(SCREEN_WIDTH);
+        make.height.mas_equalTo(SCREEN_WIDTH);
     }];
     
     [player.btnPlayOrPause mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.center.mas_equalTo(CGPointMake(SCREEN_WIDTH/2-36, -(SCREEN_WIDTH/2)+36));
         make.centerX.mas_equalTo(self);
         make.centerY.mas_equalTo(self);
         make.height.mas_equalTo(@180);
@@ -2079,29 +1999,27 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [player.fastProgressView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(27);
         make.trailing.mas_equalTo(-27);
-        make.height.offset(3);
-        make.bottom.mas_equalTo(player.fastView.bottom).offset(-9);
+        make.height.mas_equalTo(@3);
+        make.bottom.mas_equalTo(player.fastView).offset(-9);
     }];
     
     [player.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(player.topView).with.offset(45);
-        make.right.equalTo(player.topView).with.offset(-45);
-        //make.center.equalTo(player.topView);
-        make.top.equalTo(player.topView).with.offset(20);
-        
+        make.left.mas_equalTo(player.topView).offset(45);
+        make.right.mas_equalTo(player.topView).offset(-45);
+        make.top.mas_equalTo(player.topView).offset(20);
     }];
     
     [player.closeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(player.topView).with.offset(5);
-        make.height.mas_equalTo(30);
-        make.centerY.equalTo(player.titleLabel).with.offset(0);
-        make.width.mas_equalTo(30);
+        make.left.mas_equalTo(player.topView).offset(5);
+        make.height.mas_equalTo(@30);
+        make.centerY.mas_equalTo(player.titleLabel);
+        make.width.mas_equalTo(@30);
     }];
     
     [player.loadFailedLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(SCREEN_HEIGHT);
         make.center.mas_equalTo(CGPointMake(SCREEN_WIDTH/2-36, -(SCREEN_WIDTH/2)+36));
-        make.height.equalTo(@30);
+        make.height.mas_equalTo(@30);
     }];
     [player.loadingView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(CGPointMake(SCREEN_WIDTH/2-37, -(SCREEN_WIDTH/2-37)));
@@ -2111,24 +2029,24 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [player.netWorkView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(SCREEN_HEIGHT);
         make.height.mas_equalTo(SCREEN_WIDTH);
-        //make.left.mas_equalTo(player.bottom);
         make.top.mas_equalTo(0);
     }];
     
     
     [player.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(player.left).offset(SCREEN_HEIGHT/667 * 21);
-        make.height.mas_equalTo(SCREEN_WIDTH/375 * 192);
-        make.width.mas_equalTo(SCREEN_HEIGHT/667 * 48);
-        make.top.mas_equalTo(player.top).offset((SCREEN_WIDTH - SCREEN_WIDTH/375 *192)/2);
+        make.left.mas_equalTo(player).offset(ZCXHeightScale * 21);
+        make.height.mas_equalTo(ZCXWidthScale * 192);
+        make.width.mas_equalTo(ZCXHeightScale * 48);
+        make.top.mas_equalTo(player).offset((SCREEN_WIDTH - ZCXWidthScale *192)/2);
     }];
     
     [player.brightnessView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(player.right).offset(SCREEN_HEIGHT/2 - SCREEN_HEIGHT/667 * (21 + 48));
-        make.height.mas_equalTo(SCREEN_WIDTH/375 * 192);
-        make.width.mas_equalTo(SCREEN_HEIGHT/667 *48);
-        make.top.mas_equalTo(player.top).offset((SCREEN_WIDTH -SCREEN_WIDTH/375 *192)/2);
+        make.right.mas_equalTo(player).offset(- ZCXHeightScale * 21);
+        make.height.mas_equalTo(ZCXWidthScale * 192);
+        make.width.mas_equalTo(ZCXHeightScale * 48);
+        make.top.mas_equalTo(player).offset((SCREEN_WIDTH - ZCXWidthScale *192)/2);
     }];
+    
     
     [self setNeedsUpdateConstraints];
     [self updateConstraintsIfNeeded];
@@ -2149,8 +2067,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [player bringSubviewToFront:player.netWorkView];
     [player.topView setHidden:NO];
     
-    //全屏的时候隐藏全片
-    [player.btnFilmDetail setHidden:YES];
 }
 
 /**
@@ -2167,10 +2083,10 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         player.playerLayer.frame =  player.bounds;
         [fatherView addSubview:player];
         [player.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(player).with.offset(0);
-            make.right.equalTo(player).with.offset(0);
+            make.left.equalTo(player);
+            make.right.equalTo(player);
             make.height.mas_equalTo(40);
-            make.bottom.equalTo(player).with.offset(0);
+            make.bottom.equalTo(player);
         }];
         
         [player.btnPlayOrPause mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -2183,69 +2099,68 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
             make.width.mas_equalTo(177);
             make.height.mas_equalTo(80);
             make.top.mas_equalTo(player).offset(9);
-            make.centerX.equalTo(player.mas_centerX);
+            make.centerX.mas_equalTo(player);
         }];
         
         [player.fastProgressView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.mas_equalTo(player.fastView.centerX);
-            make.height.offset(3);
-            make.width.offset(146);
+            make.centerX.mas_equalTo(player);
+            make.height.mas_equalTo(3);
+            make.width.mas_equalTo(146);
             make.bottom.mas_equalTo(player.fastView.bottom).offset(-9);
         }];
         
         [player.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(player).with.offset(0);
-            make.right.equalTo(player).with.offset(0);
+            make.left.equalTo(player);
+            make.right.equalTo(player);
             make.height.mas_equalTo(60);
-            make.top.equalTo(player).with.offset(0);
+            make.top.equalTo(player);
         }];
         
         [player.bgImgView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.height.equalTo(player);
-            make.width.equalTo(player);
-            make.center.equalTo(player);
+            make.height.mas_equalTo(player);
+            make.width.mas_equalTo(player);
+            make.center.mas_equalTo(player);
         }];
         
         [player.closeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(player.topView).with.offset(5);
+            make.left.mas_equalTo(player.topView).offset(5);
             make.height.mas_equalTo(30);
-            make.top.equalTo(player.topView).with.offset(5);
+            make.top.mas_equalTo(player.topView).offset(5);
             make.width.mas_equalTo(30);
         }];
         
         [player.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(player.topView).with.offset(12);
-            make.right.equalTo(player.topView).with.offset(-12);
-            //make.center.equalTo(player.topView);
-            make.top.equalTo(player.topView).with.offset(12);
+            make.left.mas_equalTo(player.topView).offset(12);
+            make.right.mas_equalTo(player.topView).offset(-12);
+            make.top.mas_equalTo(player.topView).offset(12);
         }];
         
         [player.loadFailedLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.center.equalTo(player);
-            make.width.equalTo(player);
-            make.height.equalTo(@30);
+            make.center.mas_equalTo(player);
+            make.width.mas_equalTo(player);
+            make.height.mas_equalTo(@30);
         }];
         
         [player.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self).with.offset(0);
-            make.right.equalTo(self).with.offset(0);
+            make.left.mas_equalTo(self);
+            make.right.mas_equalTo(self);
             make.height.mas_equalTo(40);
-            make.bottom.equalTo(self).with.offset(0);
+            make.bottom.mas_equalTo(self);
             
         }];
         
         [player.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(player.top).offset(SCREEN_HEIGHT/667 * 21);
-            make.left.mas_equalTo(player.left).offset(SCREEN_WIDTH/375 * 45);
-            make.bottom.mas_equalTo(player.bottom).offset(-SCREEN_HEIGHT/667 * 24);
-            make.width.mas_equalTo(SCREEN_WIDTH/375 * 36);
+            make.top.mas_equalTo(player.top).offset(ZCXHeightScale * 21);
+            make.left.mas_equalTo(player.left).offset(ZCXWidthScale * 45);
+            make.bottom.mas_equalTo(player.bottom).offset(-ZCXHeightScale * 24);
+            make.width.mas_equalTo(ZCXWidthScale * 36);
         }];
         
         [player.brightnessView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(player.top).offset(SCREEN_HEIGHT/667 * 21);
-            make.right.mas_equalTo(player.right).offset(- SCREEN_WIDTH/375 * 45);
-            make.bottom.mas_equalTo(player.bottom).offset(- SCREEN_HEIGHT/667 * 24);
-            make.width.mas_equalTo(SCREEN_WIDTH/375 * 36);
+            make.top.mas_equalTo(player.top).offset(ZCXHeightScale * 21);
+            make.right.mas_equalTo(player.right).offset(- ZCXWidthScale * 45);
+            make.bottom.mas_equalTo(player.bottom).offset(- ZCXHeightScale * 24);
+            make.width.mas_equalTo(ZCXWidthScale * 36);
         }];
         
         [self setNeedsUpdateConstraints];
@@ -2284,10 +2199,7 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     [player.btnPlayOrPause setImage:[UIImage imageNamed:@"play_icon"] ?: [UIImage imageNamed:@"play_white_icon"] forState:UIControlStateSelected];
     
     [player showSmallScreenWithNetWork:player];
-    if (_isFilmDetail && [player.btnFilmDetail isHidden] && (!_isFromDetailView)) {
-        [player.btnFilmDetail setHidden:NO];
-        [player bringSubviewToFront:player.btnFilmDetail];
-    }
+ 
 }
 
 
@@ -2310,18 +2222,18 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
     
     //取消播放按钮
     [player.btnLeft mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@30);
-        make.width.equalTo(@60);
-        make.top.equalTo(player.labNetWorkMention.bottom).with.offset(10);
-        make.left.equalTo(player.labNetWorkMention.left).offset(-12);
+        make.height.mas_equalTo(@30);
+        make.width.mas_equalTo(@60);
+        make.top.mas_equalTo(player.labNetWorkMention.bottom).offset(10);
+        make.left.mas_equalTo(player.labNetWorkMention).offset(-12);
     }];
     
     //继续播放按钮
     [player.btnRight mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@30);
-        make.width.equalTo(@60);
-        make.top.equalTo(player.labNetWorkMention.bottom).with.offset(10);
-        make.right.equalTo(player.labNetWorkMention.right).offset(14);
+        make.height.mas_equalTo(@30);
+        make.width.mas_equalTo(@60);
+        make.top.mas_equalTo(player.labNetWorkMention.bottom).with.offset(10);
+        make.right.mas_equalTo(player.labNetWorkMention).offset(14);
     }];
 }
 /**
@@ -2353,15 +2265,6 @@ __strong static DisplayerView *sharedDisPlayerManager = nil;
         return self.screenShotImg;
     }
     return nil;
-}
-
-//设置写一个播放的内容名称
--(void) setWillPlayerTitle:(NSString*)title bShow:(BOOL) bShow{
-    [self.labWillPayeNext setHidden:YES];
-    self.isShowNextName = bShow;
-    //即将播放的内容
-    NSString * willTitle = [NSString stringWithFormat:@"即将播放 %@", title];
-    self.labWillPayeNext.text = willTitle;
 }
 
 

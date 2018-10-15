@@ -13,7 +13,7 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
-        self.backgroundColor = JXColor(0, 0, 0,0.5);
+        self.backgroundColor = ZCXColor(0, 0, 0,0.5);
         self.layer.masksToBounds = YES;
         self.layer.cornerRadius = 4;
         

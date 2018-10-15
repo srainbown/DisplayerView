@@ -11,7 +11,6 @@
 @import MediaPlayer;
 @import AVFoundation;
 @class DisplayerView;
-//@protocol DBCHHomePageCellDelegate;
 
 // 枚举值，包含水平移动方向和垂直移动方向
 typedef NS_ENUM(NSInteger, PanDirection){
@@ -78,7 +77,6 @@ typedef NS_ENUM(NSInteger, CloseBtnStyle){
 
 /** 播放器的代理 */
 @property (nonatomic, weak)id <KYVedioPlayerDelegate> delegate;
-//@property (weak, nonatomic)id <DBCHHomePageCellDelegate> homePageCellDelegate;
 
 /**设置播放器的大小和位置*/
 @property (nonatomic, assign)CGRect      disPlayerFram;
@@ -243,7 +241,7 @@ typedef NS_ENUM(NSInteger, CloseBtnStyle){
  ＊ @param fatherView 当前父视图
  **/
 -(void)showFullScreenWithInterfaceOrientation:(UIInterfaceOrientation )interfaceOrientation player:(DisplayerView *)player withFatherView:(UIView *)fatherView;
--(void)showFullScreenWithInterfaceOrientation:(UIInterfaceOrientation )interfaceOrientation player:(DisplayerView *)player withFatherView:(UIView *)fatherView withY:(CGFloat )Y;
+
 /**
  *  小屏幕显示播放
  ＊ @param player 当前播放器
@@ -265,9 +263,6 @@ typedef NS_ENUM(NSInteger, CloseBtnStyle){
  * @param player 当前播放器
  */
 -(void) showSmallScreenWithNetWork:(DisplayerView *)player;
-
-//设置写一个播放的内容名称
--(void) setWillPlayerTitle:(NSString*)title bShow:(BOOL) bShow;
 
 
 @end

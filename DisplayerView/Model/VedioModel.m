@@ -24,65 +24,14 @@
 //        self.videoCacheOrigURL = __AuthenticationVideoURl(dic[@"videoOrigDwnurl"]);
         self.videoMd5 = dic[@"videoMd5"];
         self.videoSize = dic[@"videoSize"];
-        
         self.playLenth = dic[@"duration"];
         self.playNum = dic[@"playNum"];
         self.numLove = dic[@"likeNum"];
-//        NSString* strTag = dic[@"tags"];
-//        self.vedioTags = __GetTagName(strTag);
         self.updateTime = dic[@"updateTime"];
         self.catid = dic[@"cateId"];
-        //self.catid = @"99";
-        self.source = dic[@"source"];
-        self.upNum = dic[@"upNum"];
-        self.dwnNum = dic[@"dwnNum"];
-        self.isLike = dic[@"isLike"];
-        self.isUpdwn = dic[@"isUpdwn"];
-        self.commentNum = dic[@"commentsCount"];
-        self.step = dic[@"step"];
-        self.filmID = dic[@"filmId"];
-        self.filmTitle = dic[@"filmTitle"];
-        
     }
     
     return self;
-    
 }
-
--(void)setSeries:(NSDictionary *)dict{
-    
-    self.seriesID = dict[@"id"];
-    self.seriesTitle = dict[@"title"];
-    self.seriesVideoNum = dict[@"videoNum"];
-    self.isSubscribe = dict[@"isSubscribe"];
-    self.videoUpd = [NSString stringWithFormat:@"%@",dict[@"videoUpd"]];
-    
-}
-
-//-(void) setTags: (NSArray*) arryTag tags: (NSString*) tags{
-//    self.vedioTags = [DBCHTagsModel analysisTags: arryTag tagID:tags];
-//}
-
-////kvc方法，过滤videoURL，videoCacheURL,vedioTags等被特殊处理的属性
-//-(void)setValue:(id)value forUndefinedKey:(NSString *)key{
-//
-//    if([key isEqualToString:@"videoURL"])
-//    {
-//        //视频地址鉴权
-//        self.videoURL = __AuthenticationVideoURl(value);
-//    }
-//    if([key isEqualToString:@"videoCacheURL"])
-//    {
-//
-//        //视频地址鉴权
-//        self.videoCacheURL = __AuthenticationVideoURl(value);
-//    }
-//    if([key isEqualToString:@"vedioTags"])
-//    {
-//        //tag解析方法
-//        self.vedioTags = __GetTagName(value);
-//    }
-//
-//}
 
 @end

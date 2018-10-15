@@ -26,45 +26,7 @@
 @property (nonatomic, strong) NSString * updateTime;
 @property (nonatomic, strong) NSString * catid;         //视频分类ID
 
-@property (nonatomic, strong) NSString * upNum;         //顶次数
-@property (nonatomic, strong) NSString * dwnNum;        //踩次数
-@property (nonatomic, strong) NSString * isLike;        //是否喜欢(1是 2取消)
-@property (nonatomic, strong) NSString * isUpdwn;       //是否顶踩(1顶 2踩)
-@property (nonatomic, strong) NSString * commentNum;    //评论数量
-@property (nonatomic, strong) NSString * step;          //-1 审核不通过 1:审核中 2:审核通过 8:已发布
-
-@property (nonatomic, strong) NSString * source;        //发布者
-@property (nonatomic, strong) NSString * filmID;        //相关电影ID
-@property (nonatomic, strong) NSString * filmTitle;     //相关电影的名字
-
-//系列ID
-@property (nonatomic, copy) NSString *seriesID;
-//系列标题
-@property (nonatomic, copy) NSString *seriesTitle;
-// 系列视频数量
-@property (nonatomic, copy) NSString *seriesVideoNum;
-//是否关注
-@property (nonatomic, copy) NSString *isSubscribe;
-
-//新增视频
-@property (nonatomic, copy) NSString *videoUpd;
-
-
-
-///**
-// *自定义cell的高度
-// */
-//@property (nonatomic,assign) CGFloat curCellHeight;
-//
-//@property (nonatomic, strong) NSIndexPath *indexPath;
-
--(void)setSeries:(NSDictionary *)dict;
-
 //初始化
 -(instancetype)initWithDic:(NSDictionary *)dic;
-
--(void) setTags: (NSArray*) arryTag tags: (NSString*) tags;
-
--(void)setValue:(id)value forUndefinedKey:(NSString *)key;
 
 @end
